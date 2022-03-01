@@ -1,15 +1,14 @@
 import type { Root, LinkReference, Definition, Link, Content } from 'mdast';
-import type { Node } from 'unist';
 import { remark } from 'remark';
 import { visit } from 'unist-util-visit';
 import remarkHtml from 'remark-html';
 
-import { Link as AnalyzedLink } from './types.js';
+import { PathlessAnalyzedLink } from './types.js';
 
 // Internal.
-function parseMarkdownChildrenToHtml(children: Content[]): string {
+function compileChildrenToHtml(children: Content[]): string {
   const root: Root = { type: 'root', children };
-  return remark().use(remarkHtml).stringify(root);
+  return remark().use(remarkHtml).stringify(root).trim();
 }
 
 /**
@@ -22,25 +21,37 @@ export function parseMarkdownToAst(doc: string): Root {
 /**
  * Returns a list of all links on the page.
  */
-export function getMarkdownLinks(ast: Node): AnalyzedLink[] {
-  const links: AnalyzedLink[] = [];
+export function getMarkdownLinks(ast: Root): PathlessAnalyzedLink[] {
+  const pathlessAnalyzedLinks: PathlessAnalyzedLink[] = [];
 
-  const linkReferences = new Map<string, LinkReference>();
-  const definitions = new Map<string, Definition>();
-
-  visit(ast as any, 'link', (node: Link) => {
-    console.log('-------');
-    console.log('has link!!!!');
-    console.log(JSON.stringify(parseMarkdownChildrenToHtml(node.children)));
+  // "normal links"
+  visit(ast, 'link', ({ children, title, url }: Link) => {
+    pathlessAnalyzedLinks.push({
+      html: compileChildrenToHtml(children),
+      title,
+      url,
+    });
   });
 
-  return links;
+  const linkReferences = new Map<string, LinkReference>();
+  visit(ast, 'linkReference', (node: LinkReference) => {
+    linkReferences.set(node.identifier, node);
+  });
+
+  const definitions = new Map<string, Definition>();
+  visit(ast, 'definition', (node: Definition) => {
+    definitions.set(node.identifier, node);
+  });
+
+  console.log({ pathlessAnalyzedLinks, linkReferences, definitions });
+
+  return pathlessAnalyzedLinks;
 }
 
 /**
  * Checks if the given analyzed link is internal.
  */
-export function isInternalLink(link: AnalyzedLink): boolean {
+export function isInternalLink(link: PathlessAnalyzedLink): boolean {
   console.log(link);
   return true;
 }
