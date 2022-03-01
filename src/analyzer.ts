@@ -1,26 +1,46 @@
+import type { Root, LinkReference, Definition, Link, Content } from 'mdast';
+import type { Node } from 'unist';
 import { remark } from 'remark';
-import type * as t from 'mdast';
 import { visit } from 'unist-util-visit';
+import remarkHtml from 'remark-html';
 
-import { Link } from './types.js';
+import { Link as AnalyzedLink } from './types.js';
 
-export function parseToAst(doc: string): t.Root {
+// Internal.
+function parseMarkdownChildrenToHtml(children: Content[]): string {
+  const root: Root = { type: 'root', children };
+  return remark().use(remarkHtml).stringify(root);
+}
+
+/**
+ * Returns the AST of the given string. Expects Markdown source code.
+ */
+export function parseMarkdownToAst(doc: string): Root {
   return remark().parse(doc);
 }
 
-export function getMarkdownLinks(ast: t.Root): Link[] {
-  const links: Link[] = [];
+/**
+ * Returns a list of all links on the page.
+ */
+export function getMarkdownLinks(ast: Node): AnalyzedLink[] {
+  const links: AnalyzedLink[] = [];
 
-  console.log('starting visit...\n\n');
+  const linkReferences = new Map<string, LinkReference>();
+  const definitions = new Map<string, Definition>();
 
-  visit(ast as any, 'link', (node: t.Link) => {
-    console.log(node);
+  visit(ast as any, 'link', (node: Link) => {
+    console.log('-------');
+    console.log('has link!!!!');
+    console.log(JSON.stringify(parseMarkdownChildrenToHtml(node.children)));
   });
 
   return links;
 }
 
-export function isInternalLink(link: Link): boolean {
+/**
+ * Checks if the given analyzed link is internal.
+ */
+export function isInternalLink(link: AnalyzedLink): boolean {
   console.log(link);
   return true;
 }

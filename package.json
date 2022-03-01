@@ -7,8 +7,10 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "mdast": "^3.0.0",
+    "@types/mdast": "^3.0.10",
+    "@types/unist": "^2.0.6",
     "remark": "^14.0.2",
+    "remark-html": "^15.0.1",
     "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {

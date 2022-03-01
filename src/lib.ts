@@ -1,7 +1,11 @@
 import * as fs from 'node:fs/promises';
 import { extname } from 'node:path';
 
-import { parseToAst, getMarkdownLinks, isInternalLink } from './analyzer.js';
+import {
+  parseMarkdownToAst,
+  getMarkdownLinks,
+  isInternalLink,
+} from './analyzer.js';
 import { getAllFiles } from './fs-util.js';
 import { Link } from './types.js';
 
@@ -27,7 +31,7 @@ export async function getInternalLinks(rootDirPath: string): Promise<Link[]> {
     // eslint-disable-next-line no-await-in-loop
     const contents = await fs.readFile(nodeFile.absPath, 'utf-8');
 
-    const ast = parseToAst(contents);
+    const ast = parseMarkdownToAst(contents);
 
     const internalLinks = getMarkdownLinks(ast).filter(isInternalLink);
     allInternalLinks.push(...internalLinks);
