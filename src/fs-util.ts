@@ -1,6 +1,5 @@
-import { join } from 'node:path';
 import * as fs from 'node:fs/promises';
-
+import { join } from 'node:path';
 import type { File } from './types.js';
 
 /**

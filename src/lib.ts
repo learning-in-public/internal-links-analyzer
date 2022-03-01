@@ -1,6 +1,5 @@
 import * as fs from 'node:fs/promises';
 import { extname } from 'node:path';
-
 import {
   parseMarkdownToAst,
   getMarkdownLinks,

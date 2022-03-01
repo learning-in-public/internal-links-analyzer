@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "test": "del build && yarn tsc && node ./build/_tests.js"
+    "test": "del build && yarn tsc && node build/_tests.js",
+    "lint": "yarn eslint --fix ."
   },
   "dependencies": {
     "@types/mdast": "^3.0.10",
@@ -40,17 +41,58 @@
       "prettier"
     ],
     "parserOptions": {
+      "warnOnUnsupportedTypeScriptVersion": false,
       "project": [
-        "./tsconfig.json"
+        "tsconfig.json"
       ]
     },
+    "ignorePatterns": "build/*",
     "rules": {
-      "react/jsx-filename-extension": 0,
-      "import/prefer-default-export": 0,
-      "no-restricted-syntax": 0,
-      "no-console": 0,
+      "react/jsx-filename-extension": "off",
+      "import/prefer-default-export": "off",
+      "no-restricted-syntax": "off",
+      "no-console": "off",
       "prettier/prettier": [
         "warn"
+      ],
+      "import/order": [
+        "warn",
+        {
+          "groups": [
+            [
+              "builtin"
+            ],
+            [
+              "external"
+            ],
+            [
+              "internal"
+            ],
+            [
+              "parent"
+            ],
+            [
+              "sibling"
+            ],
+            [
+              "index"
+            ],
+            [
+              "unknown"
+            ]
+          ],
+          "pathGroups": [
+            {
+              "pattern": "{@,~}/**",
+              "group": "internal",
+              "position": "after"
+            }
+          ],
+          "alphabetize": {
+            "order": "asc"
+          },
+          "newlines-between": "never"
+        }
       ]
     }
   },

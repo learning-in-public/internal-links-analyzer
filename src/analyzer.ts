@@ -1,8 +1,7 @@
 import type { Root, LinkReference, Definition, Link, Content } from 'mdast';
 import { remark } from 'remark';
-import { visit } from 'unist-util-visit';
 import remarkHtml from 'remark-html';
-
+import { visit } from 'unist-util-visit';
 import { PathlessAnalyzedLink } from './types.js';
 
 // Internal.
