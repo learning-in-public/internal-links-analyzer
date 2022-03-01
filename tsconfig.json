@@ -12,6 +12,5 @@
         "moduleResolution": "node",
         "strict": true,
         "declaration": false,
-        "esModuleInterop": false
     }
 }
