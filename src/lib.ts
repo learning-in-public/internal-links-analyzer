@@ -1,10 +1,6 @@
 import * as fs from 'node:fs/promises';
 import { extname } from 'node:path';
-import {
-  parseMarkdownToAst,
-  getMarkdownLinks,
-  isInternalLink,
-} from './analyzer.js';
+import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast.js';
 import { getAllFiles } from './fs-util.js';
 import type { PathlessAnalyzedLink } from './types.js';
 
@@ -31,8 +27,8 @@ export async function getInternalLinks(
 
     const ast = parseMarkdownToAst(contents);
 
-    const internalLinks = getMarkdownLinks(ast).filter(isInternalLink);
-    // (...*1) here.
+    const internalLinks = getMarkdownLinks(ast) /* (...*1) here. */
+      .filter(Boolean /* todo */);
     allInternalLinks.push(...internalLinks);
   }
 

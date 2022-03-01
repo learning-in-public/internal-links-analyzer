@@ -2,7 +2,7 @@ import type { Root, LinkReference, Definition, Link, Content } from 'mdast';
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
 import { visit } from 'unist-util-visit';
-import { PathlessAnalyzedLink } from './types.js';
+import { PathlessAnalyzedLink } from '../types.js';
 
 /**
  * Internal.
@@ -85,12 +85,4 @@ export function getMarkdownLinks(ast: Root): PathlessAnalyzedLink[] {
   pathlessAnalyzedLinks.push(...refLinks);
 
   return pathlessAnalyzedLinks;
-}
-
-/**
- * Checks if the given analyzed link is internal.
- */
-export function isInternalLink(link: PathlessAnalyzedLink): boolean {
-  console.log(link);
-  return true;
 }
