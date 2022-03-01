@@ -63,7 +63,6 @@ export function parseMarkdownToAst(doc: string): Root {
 export function getMarkdownLinks(ast: Root): PathlessAnalyzedLink[] {
   const pathlessAnalyzedLinks: PathlessAnalyzedLink[] = [];
 
-  // "normal links"
   visit(ast, 'link', ({ children, title, url }: Link) => {
     pathlessAnalyzedLinks.push({
       html: compileChildrenToHtml(children),
