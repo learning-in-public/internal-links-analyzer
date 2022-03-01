@@ -1,4 +1,4 @@
-export type AnalyzedLink = Omit<PathlessAnalyzedLink, 'href'> & {
+export type AnalyzedLink = PathlessAnalyzedLink & {
   /** The path of the file that contains the link */
   parentFileAbsPath: string;
 
@@ -14,7 +14,7 @@ export type PathlessAnalyzedLink = {
   title: string | null | undefined;
 
   /** Unlinked URL (as typed in the source markdown) */
-  url: string;
+  rawUrl: string;
 };
 
 export type File = {

@@ -1,8 +1,9 @@
 import * as fs from 'node:fs/promises';
 import { extname } from 'node:path';
 import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast.js';
+import { AnalyzeLinkPath, isLocalLink } from './analyzers/path.js';
 import { getAllFiles } from './fs-util.js';
-import type { PathlessAnalyzedLink } from './types.js';
+import type { AnalyzedLink } from './types.js';
 
 /**
  * Given a root directory, lists all its Markdown (`.md`) files and returns all the internal links.
@@ -13,12 +14,11 @@ import type { PathlessAnalyzedLink } from './types.js';
  */
 export async function getInternalLinks(
   rootDirPath: string
-): Promise<PathlessAnalyzedLink[]> {
+): Promise<AnalyzedLink[]> {
   const files = await getAllFiles(rootDirPath);
   const nodeFiles = files.filter((file) => extname(file.absPath) === '.md');
 
-  // todo: map to `AnalyzedLink` (*1...)
-  const allInternalLinks: PathlessAnalyzedLink[] = [];
+  const analyzedLinks: AnalyzedLink[] = [];
 
   // I won't worry about using Promise.all with some kind of batching here, maybe refactor later.
   for (const nodeFile of nodeFiles) {
@@ -27,10 +27,11 @@ export async function getInternalLinks(
 
     const ast = parseMarkdownToAst(contents);
 
-    const internalLinks = getMarkdownLinks(ast) /* (...*1) here. */
-      .filter(Boolean /* todo */);
-    allInternalLinks.push(...internalLinks);
+    const internalLinks = getMarkdownLinks(ast)
+      .filter(isLocalLink)
+      .map(AnalyzeLinkPath(nodeFile.absPath));
+    analyzedLinks.push(...internalLinks);
   }
 
-  return allInternalLinks;
+  return analyzedLinks;
 }

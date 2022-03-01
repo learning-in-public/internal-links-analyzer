@@ -1,13 +1,9 @@
-# Hello
+# Hello from `foo.md`
 
-Some *emphasis*, **importance**, and `code`.
+External link test: [GitHub](https://github.com).
 
-hello, [world](./world.md "foo"), how are you?
+Local file: [see baz](./baz.md).
 
-outro [tes**te** a_q_i](./foo)!!!
+Absolute file path: [root][/foo/bar/baz.txt].
 
-hello, [mundo][mundo-link]!!!
-
-# World
-
-  [mundo-link]: ./baz
+Another local file: [see bar](./bar.md).

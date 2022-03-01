@@ -43,7 +43,7 @@ function matchReferenceLinks(
     pathlessAnalyzedLinks.push({
       html: compileChildrenToHtml(linkRef.children),
       title: correspondingDef.title,
-      url: correspondingDef.url,
+      rawUrl: correspondingDef.url,
     });
   }
 
@@ -63,11 +63,11 @@ export function parseMarkdownToAst(doc: string): Root {
 export function getMarkdownLinks(ast: Root): PathlessAnalyzedLink[] {
   const pathlessAnalyzedLinks: PathlessAnalyzedLink[] = [];
 
-  visit(ast, 'link', ({ children, title, url }: Link) => {
+  visit(ast, 'link', ({ children, title, url: rawUrl }: Link) => {
     pathlessAnalyzedLinks.push({
       html: compileChildrenToHtml(children),
       title,
-      url,
+      rawUrl,
     });
   });
 
