@@ -1,9 +1,9 @@
 export type AnalyzedLink = PathlessAnalyzedLink & {
   /** The path of the file that contains the link */
-  parentFileAbsPath: string;
+  fromPath: string;
 
   /** Other file path */
-  linkAbsPath: string;
+  toPath: string;
 };
 
 export type PathlessAnalyzedLink = {
@@ -15,9 +15,4 @@ export type PathlessAnalyzedLink = {
 
   /** Unlinked URL (as typed in the source markdown) */
   rawUrl: string;
-};
-
-export type File = {
-  name: string;
-  absPath: string;
 };

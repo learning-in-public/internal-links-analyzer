@@ -13,18 +13,18 @@ export function isLocalLink(link: PathlessAnalyzedLink): boolean {
  *
  * Assumes the given pathlessAnalyzedLink is local.
  */
-export function AnalyzeLinkPath(parentFileAbsPath: string) {
+export function AnalyzeLinkPath(parentFilePath: string) {
   return function analyzeLinkPath(link: PathlessAnalyzedLink): AnalyzedLink {
     const { html, title, rawUrl } = link;
-    const parentDirAbsPath = dirname(parentFileAbsPath);
-    const linkAbsPath = join(parentDirAbsPath, rawUrl);
+    const parentDirPath = dirname(parentFilePath);
+    const toPath = join(parentDirPath, rawUrl);
 
     return {
       html,
       title,
       rawUrl,
-      parentFileAbsPath,
-      linkAbsPath,
+      fromPath: parentFilePath,
+      toPath,
     };
   };
 }

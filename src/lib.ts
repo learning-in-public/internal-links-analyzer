@@ -1,8 +1,7 @@
 import * as fs from 'node:fs/promises';
-import { extname } from 'node:path';
+import { extname, join } from 'node:path';
 import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast.js';
 import { AnalyzeLinkPath, isLocalLink } from './analyzers/path.js';
-import { getAllFiles } from './fs-util.js';
 import type { AnalyzedLink } from './types.js';
 
 /**
@@ -15,21 +14,25 @@ import type { AnalyzedLink } from './types.js';
 export async function getInternalLinks(
   rootDirPath: string
 ): Promise<AnalyzedLink[]> {
-  const files = await getAllFiles(rootDirPath);
-  const nodeFiles = files.filter((file) => extname(file.absPath) === '.md');
+  // TODO: Maybe load other directories recursively. For now only the current directory is read.
+  const files = await fs.readdir(rootDirPath, { withFileTypes: true });
+
+  const nodePaths = files
+    .filter((dirent) => dirent.isFile() && extname(dirent.name) === '.md')
+    .map(({ name }) => join(rootDirPath, name));
 
   const analyzedLinks: AnalyzedLink[] = [];
 
   // I won't worry about using Promise.all with some kind of batching here, maybe refactor later.
-  for (const nodeFile of nodeFiles) {
+  for (const nodePath of nodePaths) {
     // eslint-disable-next-line no-await-in-loop
-    const contents = await fs.readFile(nodeFile.absPath, 'utf-8');
+    const contents = await fs.readFile(nodePath, 'utf-8');
 
     const ast = parseMarkdownToAst(contents);
 
     const internalLinks = getMarkdownLinks(ast)
       .filter(isLocalLink)
-      .map(AnalyzeLinkPath(nodeFile.absPath));
+      .map(AnalyzeLinkPath(nodePath));
     analyzedLinks.push(...internalLinks);
   }
 
