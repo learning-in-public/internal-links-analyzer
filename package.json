@@ -1,0 +1,56 @@
+{
+  "type": "module",
+  "name": "internal-links",
+  "version": "0.1.0",
+  "description": "Extracts internal links from a series of Markdown files",
+  "license": "MIT",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "mdast": "^3.0.0",
+    "remark": "^14.0.2",
+    "unist-util-visit": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
+    "eslint": "^8.10.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.6.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base",
+      "airbnb-typescript",
+      "prettier"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "parserOptions": {
+      "project": [
+        "./tsconfig.json"
+      ]
+    },
+    "rules": {
+      "react/jsx-filename-extension": 0,
+      "import/prefer-default-export": 0,
+      "no-restricted-syntax": 0,
+      "no-console": 0,
+      "prettier/prettier": [
+        "warn"
+      ]
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "singleQuote": true
+  }
+}
