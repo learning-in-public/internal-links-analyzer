@@ -6,9 +6,9 @@ Here, "internal link" is defined as any markdown link with a relative path. All 
 
 ## Tech manifest
 
-The `remark-parse` library is used in order to parse markdown files.
+The `remark` library is used in order to parse markdown files.
 
 ## Notes, questions and other discussions
 
-- The current implementation does not concurrently load files. This may be refactored later.
+- The current implementation does not concurrently load files in subdirectories from the root. Only "immediate children" are currently handled. This may be refactored later.
 - Should this project also be responsible for the _parsing_ and _compiling_ (to HTML) of the markdown files? Currently it just analyzes each parse tree to locate internal links (i.e. no compilation is performed).
