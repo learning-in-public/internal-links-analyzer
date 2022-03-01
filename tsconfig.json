@@ -6,7 +6,7 @@
         "node_modules"
     ],
     "compilerOptions": {
-        "noEmit": true,
+        "outDir": "build",
         "target": "es2020",
         "module": "es2020",
         "moduleResolution": "node",
