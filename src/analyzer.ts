@@ -4,10 +4,50 @@ import remarkHtml from 'remark-html';
 import { visit } from 'unist-util-visit';
 import { PathlessAnalyzedLink } from './types.js';
 
-// Internal.
+/**
+ * Internal.
+ *
+ * Compiles the given children (conceptually rooted under a single node) to HTML.
+ */
 function compileChildrenToHtml(children: Content[]): string {
   const root: Root = { type: 'root', children };
   return remark().use(remarkHtml).stringify(root).trim();
+}
+
+/**
+ * Internal.
+ *
+ * Given a map of link references and a map of definitions, link these over by the link identifier.
+ *
+ * An error is raised if there are any link references whose identifier does not refer to any
+ * existing definition.
+ *
+ * For more information about "reference links", see:
+ * https://spec.commonmark.org/0.30/#full-reference-link
+ */
+function matchReferenceLinks(
+  linkRefs: Map<string, LinkReference>,
+  defs: Map<string, Definition>
+): PathlessAnalyzedLink[] {
+  const pathlessAnalyzedLinks: PathlessAnalyzedLink[] = [];
+
+  for (const [ident, linkRef] of linkRefs) {
+    const correspondingDef = defs.get(ident);
+
+    if (!correspondingDef) {
+      // Per spec this should never happen as a match must exist to form a valid ref link.
+      // https://spec.commonmark.org/0.30/#full-reference-link
+      throw new Error('Unreachable.');
+    }
+
+    pathlessAnalyzedLinks.push({
+      html: compileChildrenToHtml(linkRef.children),
+      title: correspondingDef.title,
+      url: correspondingDef.url,
+    });
+  }
+
+  return pathlessAnalyzedLinks;
 }
 
 /**
@@ -42,7 +82,8 @@ export function getMarkdownLinks(ast: Root): PathlessAnalyzedLink[] {
     definitions.set(node.identifier, node);
   });
 
-  console.log({ pathlessAnalyzedLinks, linkReferences, definitions });
+  const refLinks = matchReferenceLinks(linkReferences, definitions);
+  pathlessAnalyzedLinks.push(...refLinks);
 
   return pathlessAnalyzedLinks;
 }

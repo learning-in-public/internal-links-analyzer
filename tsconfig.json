@@ -6,6 +6,9 @@
         "node_modules"
     ],
     "compilerOptions": {
+        "lib": [
+            "es2021"
+        ],
         "outDir": "build",
         "target": "es2020",
         "module": "es2022",

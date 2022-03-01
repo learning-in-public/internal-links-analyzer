@@ -51,6 +51,7 @@
       "react/jsx-filename-extension": "off",
       "import/prefer-default-export": "off",
       "no-restricted-syntax": "off",
+      "no-continue": "off",
       "no-console": "off",
       "prettier/prettier": [
         "warn"

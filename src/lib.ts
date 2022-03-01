@@ -18,8 +18,6 @@ import type { PathlessAnalyzedLink } from './types.js';
 export async function getInternalLinks(
   rootDirPath: string
 ): Promise<PathlessAnalyzedLink[]> {
-  console.log(`Will read files from ${rootDirPath}.`);
-
   const files = await getAllFiles(rootDirPath);
   const nodeFiles = files.filter((file) => extname(file.absPath) === '.md');
 
