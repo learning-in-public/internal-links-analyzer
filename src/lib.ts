@@ -1,9 +1,9 @@
 import * as fs from 'node:fs/promises';
 import { extname } from 'node:path';
 
-import { parseToAst, getMarkdownLinks, isInternalLink } from './analyzer';
-import { getAllFiles } from './fs-util';
-import { Link } from './types';
+import { parseToAst, getMarkdownLinks, isInternalLink } from './analyzer.js';
+import { getAllFiles } from './fs-util.js';
+import { Link } from './types.js';
 
 export type { Link };
 
@@ -15,6 +15,8 @@ export type { Link };
  * "internal" and, as such, must refer to another file within the provided root directory.
  */
 export async function getInternalLinks(rootDirPath: string): Promise<Link[]> {
+  console.log(`Will read files from ${rootDirPath}.`);
+
   const files = await getAllFiles(rootDirPath);
   const nodeFiles = files.filter((file) => extname(file.absPath) === '.md');
 

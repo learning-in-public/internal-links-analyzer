@@ -1,7 +1,8 @@
 import { remark } from 'remark';
 import type * as t from 'mdast';
 import { visit } from 'unist-util-visit';
-import { Link } from './types';
+
+import { Link } from './types.js';
 
 export function parseToAst(doc: string): t.Root {
   return remark().parse(doc);

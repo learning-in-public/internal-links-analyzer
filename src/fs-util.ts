@@ -1,7 +1,7 @@
-import { join } from 'path';
-import * as fs from 'fs/promises';
+import { join } from 'node:path';
+import * as fs from 'node:fs/promises';
 
-import type { File } from './types';
+import type { File } from './types.js';
 
 /**
  * Loads all files within the given directory.
