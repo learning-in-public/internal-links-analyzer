@@ -23,18 +23,18 @@ export async function getInternalLinks(
 
   const analyzedLinks: AnalyzedLink[] = [];
 
-  // I won't worry about using Promise.all with some kind of batching here, maybe refactor later.
-  for (const nodePath of nodePaths) {
-    // eslint-disable-next-line no-await-in-loop
-    const contents = await fs.readFile(nodePath, 'utf-8');
+  const promiseList = nodePaths.map((nodePath) => fs.readFile(nodePath, 'utf-8'));
+  const contentList = await Promise.all(promiseList);
 
+  contentList.forEach((contents, index) => {
     const ast = parseMarkdownToAst(contents);
 
     const internalLinks = getMarkdownLinks(ast)
       .filter(isLocalLink)
-      .map(AnalyzeLinkPath(nodePath));
+      .map(AnalyzeLinkPath(nodePaths[index]));
+    
     analyzedLinks.push(...internalLinks);
-  }
-
+  });
+  
   return analyzedLinks;
 }
