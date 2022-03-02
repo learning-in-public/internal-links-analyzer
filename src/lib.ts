@@ -1,4 +1,4 @@
-import * as fs from 'node:fs/promises';
+import * as fs from 'node:fs';
 import { extname, join } from 'node:path';
 import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast.js';
 import { AnalyzeLinkPath, isLocalLink } from './analyzers/path.js';
@@ -15,7 +15,7 @@ export async function getInternalLinks(
   rootDirPath: string
 ): Promise<AnalyzedLink[]> {
   // TODO: Maybe load other directories recursively. For now only the current directory is read.
-  const files = await fs.readdir(rootDirPath, { withFileTypes: true });
+  const files = fs.readdirSync(rootDirPath, { withFileTypes: true });
 
   const nodePaths = files
     .filter((dirent) => dirent.isFile() && extname(dirent.name) === '.md')
@@ -23,8 +23,9 @@ export async function getInternalLinks(
 
   const analyzedLinks: AnalyzedLink[] = [];
 
-  const promiseList = nodePaths.map((nodePath) => fs.readFile(nodePath, 'utf-8'));
-  const contentList = await Promise.all(promiseList);
+  const contentList = nodePaths.map((nodePath) =>
+    fs.readFileSync(nodePath, 'utf-8')
+  );
 
   contentList.forEach((contents, index) => {
     const ast = parseMarkdownToAst(contents);
@@ -32,9 +33,9 @@ export async function getInternalLinks(
     const internalLinks = getMarkdownLinks(ast)
       .filter(isLocalLink)
       .map(AnalyzeLinkPath(nodePaths[index]));
-    
+
     analyzedLinks.push(...internalLinks);
   });
-  
+
   return analyzedLinks;
 }
