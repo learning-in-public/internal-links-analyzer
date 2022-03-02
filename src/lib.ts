@@ -11,9 +11,7 @@ import type { AnalyzedLink } from './types.js';
  * "http://" or "https://" or absolute file paths) are ignored. Relative links are considered to be
  * "internal" and, as such, must refer to another file within the provided root directory.
  */
-export async function getInternalLinks(
-  rootDirPath: string
-): Promise<AnalyzedLink[]> {
+export function getInternalLinks(rootDirPath: string): AnalyzedLink[] {
   // TODO: Maybe load other directories recursively. For now only the current directory is read.
   const files = fs.readdirSync(rootDirPath, { withFileTypes: true });
 
