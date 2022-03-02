@@ -21,19 +21,17 @@ export function getInternalLinks(rootDirPath: string): AnalyzedLink[] {
 
   const analyzedLinks: AnalyzedLink[] = [];
 
-  const contentList = nodePaths.map((nodePath) =>
-    fs.readFileSync(nodePath, 'utf-8')
-  );
+  for (const nodePath of nodePaths) {
+    const content = fs.readFileSync(nodePath, 'utf-8');
 
-  contentList.forEach((contents, index) => {
-    const ast = parseMarkdownToAst(contents);
+    const ast = parseMarkdownToAst(content);
 
     const internalLinks = getMarkdownLinks(ast)
       .filter(isLocalLink)
-      .map(AnalyzeLinkPath(nodePaths[index]));
+      .map(AnalyzeLinkPath(nodePath));
 
     analyzedLinks.push(...internalLinks);
-  });
+  }
 
   return analyzedLinks;
 }
