@@ -1,5 +1,5 @@
 import { dirname, join } from 'node:path';
-import { AnalyzedLink, PathlessAnalyzedLink } from '../types.js';
+import { AnalyzedLink, PathlessAnalyzedLink } from '../types';
 
 /**
  * Checks whether the given link is local.
