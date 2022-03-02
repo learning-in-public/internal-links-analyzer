@@ -1,8 +1,8 @@
 import * as fs from 'node:fs';
 import { extname, join } from 'node:path';
-import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast.js';
-import { AnalyzeLinkPath, isLocalLink } from './analyzers/path.js';
-import type { AnalyzedLink } from './types.js';
+import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast';
+import { AnalyzeLinkPath, isLocalLink } from './analyzers/path';
+import type { AnalyzedLink } from './types';
 
 /**
  * Given a root directory, lists all its Markdown (`.md`) files and returns all the internal links.
