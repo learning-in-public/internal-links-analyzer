@@ -24,7 +24,11 @@ export async function getInternalLinks(
   const analyzedLinks: AnalyzedLink[] = [];
 
   const promiseList = nodePaths.map((nodePath) => fs.readFile(nodePath, 'utf-8'));
-  const contentList = await Promise.all(promiseList);
+  const contentList: string[] = [];
+  
+  await Promise.all(promiseList)
+  .then(result => result.forEach(i => contentList.push(i)))
+  .catch(console.log);
 
   contentList.forEach((contents, index) => {
     const ast = parseMarkdownToAst(contents);
