@@ -7,8 +7,11 @@
   "private": true,
   "scripts": {
     "build": "del build && yarn tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "yarn eslint --fix .",
     "test": "node --experimental-vm-modules $(yarn bin jest)",
-    "lint": "yarn eslint --fix ."
+    "type-check": "tsc --project tsconfig.json --pretty --noEmit"
   },
   "dependencies": {
     "@types/mdast": "^3.0.10",
