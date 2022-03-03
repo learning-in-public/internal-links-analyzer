@@ -1,19 +1,13 @@
 {
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules"
-    ],
-    "compilerOptions": {
-        "lib": [
-            "es2021"
-        ],
-        "outDir": "build",
-        "target": "es2020",
-        "module": "es2022",
-        "moduleResolution": "node",
-        "strict": true,
-        "declaration": false,
-    }
+  "compilerOptions": {
+    "lib": ["es2021"],
+    "outDir": "build",
+    "target": "es2020",
+    "module": "es2022",
+    "moduleResolution": "node",
+    "strict": true,
+    "declaration": false
+  },
+  "include": ["src", "jest.config.js"],
+  "exclude": ["node_modules"]
 }
