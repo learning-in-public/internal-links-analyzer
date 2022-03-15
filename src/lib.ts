@@ -1,8 +1,12 @@
 import * as fs from 'node:fs';
 import { extname, join } from 'node:path';
-import { parseMarkdownToAst, getMarkdownLinks } from './analyzers/ast';
+import {
+  parseMarkdownToAst,
+  getMarkdownFrontmatter,
+  getMarkdownLinks,
+} from './analyzers/ast';
 import { AnalyzeLinkPath, isLocalLink } from './analyzers/path';
-import type { AnalyzedLink } from './types';
+import type { AnalyzedLink, Frontmatter } from './types';
 
 /**
  * Given a root directory, lists all its Markdown (`.md`) files and returns all the internal links.
@@ -19,19 +23,30 @@ export function getInternalLinks(rootDirPath: string): AnalyzedLink[] {
     .filter((dirent) => dirent.isFile() && extname(dirent.name) === '.md')
     .map(({ name }) => join(rootDirPath, name));
 
-  const analyzedLinks: AnalyzedLink[] = [];
-
-  for (const nodePath of nodePaths) {
+  const asts = nodePaths.map((nodePath) => {
     const content = fs.readFileSync(nodePath, 'utf-8');
 
-    const ast = parseMarkdownToAst(content);
+    return parseMarkdownToAst(content);
+  });
 
-    const internalLinks = getMarkdownLinks(ast)
-      .filter(isLocalLink)
-      .map(AnalyzeLinkPath(nodePath));
+  const frontmatters = new Map<string, Frontmatter>();
 
-    analyzedLinks.push(...internalLinks);
-  }
+  asts.forEach((ast, index) => {
+    const nodePath = nodePaths[index];
+    const frontmatter = getMarkdownFrontmatter(ast);
+
+    if (frontmatter) frontmatters.set(nodePath, frontmatter);
+  });
+
+  const analyzedLinks = asts
+    .map((ast, index) => {
+      const nodePath = nodePaths[index];
+
+      return getMarkdownLinks(ast)
+        .filter(isLocalLink)
+        .map(AnalyzeLinkPath(nodePath, frontmatters));
+    })
+    .flat();
 
   return analyzedLinks;
 }

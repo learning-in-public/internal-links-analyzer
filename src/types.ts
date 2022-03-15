@@ -16,3 +16,6 @@ export type PathlessAnalyzedLink = {
   /** Unlinked URL (as typed in the source markdown) */
   rawUrl: string;
 };
+
+// TODO: improve Frontmatter type
+export type Frontmatter = Record<string, unknown>;

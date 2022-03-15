@@ -1,3 +1,7 @@
+---
+title: Foo
+---
+
 # Hello from `foo.md`
 
 External link test: [GitHub](https://github.com).
