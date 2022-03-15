@@ -6,12 +6,12 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixturesPath = path.join(dirname, '../__fixtures__');
 
 it('gets the internal links', async () => {
-  const links = await getInternalLinks(fixturesPath);
+  const links = getInternalLinks(fixturesPath);
 
   expect(links).toEqual([
     {
       html: 'see baz',
-      title: null,
+      title: 'Baz',
       rawUrl: './baz.md',
       fromPath: path.join(fixturesPath, 'foo.md'),
       toPath: path.join(fixturesPath, 'baz.md'),

@@ -1,8 +1,10 @@
 import type { Root, LinkReference, Definition, Link, Content } from 'mdast';
 import { remark } from 'remark';
+import remarkFrontmatter from 'remark-frontmatter';
 import remarkHtml from 'remark-html';
+import * as yaml from 'js-yaml';
 import { visit } from 'unist-util-visit';
-import { PathlessAnalyzedLink } from '../types';
+import { Frontmatter, PathlessAnalyzedLink } from '../types';
 
 /**
  * Internal.
@@ -54,7 +56,21 @@ function matchReferenceLinks(
  * Returns the AST of the given string. Expects Markdown source code.
  */
 export function parseMarkdownToAst(doc: string): Root {
-  return remark().parse(doc);
+  return remark().use(remarkFrontmatter).parse(doc);
+}
+
+/**
+ * Returns the frontmatter of the page.
+ */
+export function getMarkdownFrontmatter(ast: Root): Frontmatter | undefined {
+  let frontmatter: Frontmatter | undefined = undefined;
+
+  visit(ast, 'yaml', ({ value }) => {
+    // TODO: check if the frontmatter is an object
+    frontmatter = yaml.load(value) as Frontmatter;
+  });
+
+  return frontmatter;
 }
 
 /**
